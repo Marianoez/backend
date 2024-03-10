@@ -49,39 +49,16 @@ class ProductManager {
       );
     }
   }
+
+  //Un metodo extra para probar.
+  getNameById(i) {
+    const name = this.products.find((e) => e.id == i);
+    if (name) {
+      console.log(name);
+      const nameF = name.title;
+      console.log(nameF);
+    }
+  }
 }
 
-//Pruebas con productos
-const p1 = new ProductManager();
-
-p1.addProduct(
-  "Play 5",
-  "Ultima Playstation 5",
-  999,
-  "www.google.com.ar",
-  "d1123",
-  185
-);
-p1.addProduct(
-  "Play 4",
-  "Play station 4 + juegos",
-  599,
-  "www.outlook.com.ar",
-  "d1124",
-  20
-);
-p1.addProduct(
-  "SEGA",
-  "Consola antigua de videojuegos 32bits",
-  199,
-  "www.youtube.com.ar",
-  "d1125",
-  10
-);
-
-//Mostramos productos del array
-p1.getProduct();
-//Mostramos productos por Id
-p1.getProductById(2);
-//Mostramos error al no encontrar producto asignado al Id
-p1.getProductById(8);
+module.exports = ProductManager;

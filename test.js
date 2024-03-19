@@ -4,14 +4,15 @@ const ProductManager = require("./ProductManager");
 
 const p1 = new ProductManager();
 
-p1.addProduct(
-  "Play 5",
-  "Ultima Playstation 5",
-  999,
+/* p1.addProduct(
+  "Parlante Bluetooth",
+  "JBL",
+  15000,
   "www.google.com.ar",
-  "d1123",
-  185
+  "d1127",
+  21
 );
+
 p1.addProduct(
   "Pc Gamer",
   "Pc gamer con monitor y placa de video RTX",
@@ -27,25 +28,42 @@ p1.addProduct(
   "www.youtube.com.ar",
   "d1125",
   10
-);
+); */
+
+//Recuperamos productos del archivo
+p1.recovery();
 
 //Mostramos todos los productos del array
 p1.getProduct();
+
+/* p1.addProduct(
+  "Parlante Bluetooth",
+  "JBL",
+  15000,
+  "www.google.com.ar",
+  "d1127",
+  21
+); */
+
 // *********************** Salto de linea ***********************
-console.log("");
+/* console.log("");
 //Mostramos productos por Id
-console.log("Producto con ID 2: ");
-p1.getProductById(2);
+console.log("Producto con ID 3: ");
+p1.getProductById(3);
 // *********************** Salto de linea ***********************
 console.log("");
 //Mostramos mensaje de error por Id inexistente.
 p1.getProductById(4);
 // *********************** Salto de linea ***********************
-console.log("");
+console.log(""); */
+
+//
+
+//p1.guardar();
 
 //Probamos pidiendole al usuario que ingrese un numero ed ID.
 
-let Idrequerido = 0;
+/* let Idrequerido = 0;
 
 const readline = require("readline");
 
@@ -64,4 +82,4 @@ rl.question(
     p1.getProductById(Idrequerido);
     rl.close();
   }
-);
+); */

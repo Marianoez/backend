@@ -1,36 +1,9 @@
-const fs = require("fs");
-const { encode } = require("punycode");
-const { productId } = require("./ProductManager1");
-
 class ProductManager {
   products;
   static productId = 0;
 
   constructor() {
     this.products = [];
-    this.path = "./files/newProduct.json";
-  }
-
-  async recovery(path) {
-    try {
-      const data = await fs.promises.readFile(this.path, {
-        encoding: "utf-8",
-      });
-
-      this.products = JSON.parse(data);
-
-      this.getProduct(this.products);
-
-      ProductManager.productId = this.products.length;
-
-      console.log("ESTE ES MI PRODUCTID ACTUAL: ", ProductManager.productId);
-    } catch (err) {
-      console.error(`Error al recuperar los productos: ${err.message}`);
-    }
-  }
-
-  show() {
-    console.log(this.products);
   }
 
   addProduct(title, description, price, thumbnail, code, stock) {
@@ -63,9 +36,7 @@ class ProductManager {
 
   //Mostramos los productos agregados.
   getProduct() {
-    console.log(typeof this.products);
-    this.products.forEach((e) => console.log(e));
-    console.log("SSSSSSSSSSSSSSSSS");
+    console.log(this.products);
   }
 
   getProductById(i) {
@@ -87,14 +58,6 @@ class ProductManager {
       const nameF = name.title;
       console.log(nameF);
     }
-  }
-
-  read() {}
-  //crear archivo con los nuevos productos.
-  saveFile() {
-    fs.writeFileSync(this.path, JSON.stringify(this.products), {
-      encoding: "utf8",
-    });
   }
 }
 

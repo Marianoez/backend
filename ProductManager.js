@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { encode } = require("punycode");
 const { productId } = require("./ProductManager1");
+const { config } = require("process");
 
 class ProductManager {
   products;
@@ -35,12 +36,14 @@ class ProductManager {
 
     //Validamos que todos los campos sean provistos.
     if (!title || !description || !price || !thumbnail || !code || !stock)
-      return "Alguno de los parametros no fueron asignados.";
+      return console.log("Alguno de los parametros no fueron asignados.");
 
     //Validamos que el code no se repita.
     const repiteCode = this.products.some((p) => p.code == code);
     if (repiteCode)
-      return "Codigo existente en otro producto, ingrese un codigo distinto por favor.";
+      return console.log(
+        "Codigo existente en otro producto, ingrese un codigo distinto por favor."
+      );
 
     //Inicializamos el nuevo producto.
     const newProduct = {
@@ -52,9 +55,7 @@ class ProductManager {
       code,
       stock,
     };
-    console.log("anda");
     this.products.push(newProduct);
-    console.log(this.products);
   }
 
   //Mostramos los productos agregados.

@@ -11,9 +11,10 @@ async function exe() {
     "Pc gamer con monitor y placa de video RTX",
     2000,
     "www.outlook.com.ar",
-    "d11288",
+    "d112444",
     20
   );
+  await p1.getProduct();
   await p1.delete(5);
 }
 exe();

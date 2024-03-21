@@ -52,9 +52,8 @@ class ProductManager {
       code,
       stock,
     };
+    console.log("anda");
     this.products.push(newProduct);
-    this.saveFile();
-    this.getProduct();
   }
 
   //Mostramos los productos agregados.

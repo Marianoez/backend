@@ -54,6 +54,7 @@ class ProductManager {
     };
     console.log("anda");
     this.products.push(newProduct);
+    console.log(this.products);
   }
 
   //Mostramos los productos agregados.

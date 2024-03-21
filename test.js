@@ -6,18 +6,15 @@ const p1 = new ProductManager();
 
 async function exe() {
   await p1.recovery();
-  await p1.getProduct();
   await p1.addProduct(
     "Pc Gamer",
     "Pc gamer con monitor y placa de video RTX",
     2000,
     "www.outlook.com.ar",
-    "d1124",
+    "d11288",
     20
   );
-  await p1.recovery();
-  await p1.getProduct();
-  //await p1.delete(2);
+  await p1.delete(5);
 }
 exe();
 

@@ -19,18 +19,12 @@ class ProductManager {
 
       this.products = JSON.parse(data);
 
-      this.getProduct(this.products);
-
       ProductManager.productId = this.products.length;
 
-      console.log("ESTE ES MI PRODUCTID ACTUAL: ", ProductManager.productId);
+      //console.log("ESTE ES MI PRODUCTID ACTUAL: ", ProductManager.productId);
     } catch (err) {
       console.error(`Error al recuperar los productos: ${err.message}`);
     }
-  }
-
-  show() {
-    console.log(this.products);
   }
 
   addProduct(title, description, price, thumbnail, code, stock) {
@@ -59,13 +53,14 @@ class ProductManager {
       stock,
     };
     this.products.push(newProduct);
+    this.saveFile();
+    this.getProduct();
   }
 
   //Mostramos los productos agregados.
   getProduct() {
-    console.log(typeof this.products);
+    console.log("Todos los Productos");
     this.products.forEach((e) => console.log(e));
-    console.log("SSSSSSSSSSSSSSSSS");
   }
 
   getProductById(i) {
@@ -89,7 +84,19 @@ class ProductManager {
     }
   }
 
-  read() {}
+  //Borrar Producto
+  delete(id) {
+    if (this.products.find((e) => e.id == id)) {
+      const ni = this.products.findIndex((e) => e.id == id);
+      console.log(`El index es ${ni}`);
+      this.products.splice([ni], 1);
+      this.getProduct();
+      this.saveFile();
+    } else {
+      console.log(`El ID ${id} no corresponde a ningun producto.`);
+    }
+  }
+
   //crear archivo con los nuevos productos.
   saveFile() {
     fs.writeFileSync(this.path, JSON.stringify(this.products), {

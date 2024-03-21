@@ -4,62 +4,20 @@ const ProductManager = require("./ProductManager");
 
 const p1 = new ProductManager();
 
-/* p1.addProduct(
-  "Parlante Bluetooth",
-  "JBL",
-  15000,
-  "www.google.com.ar",
-  "d1127",
-  21
-);
-
-p1.addProduct(
-  "Pc Gamer",
-  "Pc gamer con monitor y placa de video RTX",
-  2000,
-  "www.outlook.com.ar",
-  "d1124",
-  20
-);
-p1.addProduct(
-  "SEGA",
-  "Consola antigua de videojuegos 32bits",
-  199,
-  "www.youtube.com.ar",
-  "d1125",
-  10
-); */
-
-//Recuperamos productos del archivo
-p1.recovery();
-
-//Mostramos todos los productos del array
-p1.getProduct();
-
-/* p1.addProduct(
-  "Parlante Bluetooth",
-  "JBL",
-  15000,
-  "www.google.com.ar",
-  "d1127",
-  21
-); */
-
-// *********************** Salto de linea ***********************
-/* console.log("");
-//Mostramos productos por Id
-console.log("Producto con ID 3: ");
-p1.getProductById(3);
-// *********************** Salto de linea ***********************
-console.log("");
-//Mostramos mensaje de error por Id inexistente.
-p1.getProductById(4);
-// *********************** Salto de linea ***********************
-console.log(""); */
-
-//
-
-//p1.guardar();
+async function exe() {
+  await p1.recovery();
+  await p1.getProduct();
+  //await p1.delete(2);
+  await p1.addProduct(
+    "Pc Gamer",
+    "Pc gamer con monitor y placa de video RTX",
+    2000,
+    "www.outlook.com.ar",
+    "d1124",
+    20
+  );
+}
+exe();
 
 //Probamos pidiendole al usuario que ingrese un numero ed ID.
 

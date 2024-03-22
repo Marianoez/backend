@@ -10,6 +10,7 @@ class ProductManager {
   constructor() {
     this.products = [];
     this.path = "./files/newProduct.json";
+    this.pathReset = "./files/backUp.json";
   }
 
   async recovery(path) {
@@ -119,6 +120,7 @@ class ProductManager {
         obj[prop] = objUptd[prop];
       });
       this.products.splice([ni], 1, obj);
+      this.saveFile();
     } else {
       console.log(`El ID ${id} no corresponde a ningun producto.`);
     }
@@ -129,6 +131,12 @@ class ProductManager {
     fs.writeFileSync(this.path, JSON.stringify(this.products), {
       encoding: "utf8",
     });
+  }
+
+  //Reset de la db
+  resetDb() {
+    const db = fs.readFileSync(this.pathReset, { encoding: "utf-8" });
+    fs.writeFileSync(this.path, db);
   }
 }
 

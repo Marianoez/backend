@@ -16,17 +16,18 @@ async function exe() {
   );
   await p1.getProduct();
   // ------> Borramos producto con ID Requerida.
-  await p1.delete(5);
+  await p1.delete();
   // -------> Update a producto 2 o el que se desee y se lo sobreescribe en archivo.
   // -------> (Si se pone Id incorrecto error, si se pide cambiar ID error.)
   // -------> Update no tiene la opcion saveFile(), para no romper el archivo con las pruebas, una vez aprobado se lo habilito.
-  await p1.updateProduct(2, {
+  await p1.updateProduct(3, {
     title: "Hotwheel....................................",
     price: 5000000000000000000000000000000000000000,
     thumbnail: "www.youtube.com///////////////////////////////////",
     stock: 2,
   });
   await p1.getProduct();
+  await p1.resetDb();
 }
 exe();
 

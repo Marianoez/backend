@@ -7,15 +7,26 @@ const p1 = new ProductManager();
 async function exe() {
   await p1.recovery();
   await p1.addProduct(
-    "Pc Gamer",
-    "Pc gamer con monitor y placa de video RTX",
-    2000,
-    "www.outlook.com.ar",
-    "d112444",
-    20
+    "Placa de video",
+    "Placa de video RTX 4090",
+    2500,
+    "www.gmail.com",
+    "d112449",
+    15
   );
   await p1.getProduct();
+  // ------> Borramos producto con ID Requerida.
   await p1.delete(5);
+  // -------> Update a producto 2 o el que se desee y se lo sobreescribe en archivo.
+  // -------> (Si se pone Id incorrecto error, si se pide cambiar ID error.)
+  // -------> Update no tiene la opcion saveFile(), para no romper el archivo con las pruebas, una vez aprobado se lo habilito.
+  await p1.updateProduct(2, {
+    title: "Hotwheel....................................",
+    price: 5000000000000000000000000000000000000000,
+    thumbnail: "www.youtube.com///////////////////////////////////",
+    stock: 2,
+  });
+  await p1.getProduct();
 }
 exe();
 

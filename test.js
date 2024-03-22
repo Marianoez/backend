@@ -20,6 +20,7 @@ async function exe() {
   // -------> Update a producto 2 o el que se desee y se lo sobreescribe en archivo.
   // -------> (Si se pone Id incorrecto error, si se pide cambiar ID error.)
   // -------> Update no tiene la opcion saveFile(), para no romper el archivo con las pruebas, una vez aprobado se lo habilito.
+  // -------> Se agrega resetDb, para arreglar el problema anteriormente citado.
   await p1.updateProduct(3, {
     title: "Hotwheel....................................",
     price: 5000000000000000000000000000000000000000,

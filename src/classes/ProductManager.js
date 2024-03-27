@@ -8,7 +8,7 @@ class ProductManager {
 
   constructor() {
     this.products = [];
-    this.path = "./files/newProduct.json";
+    this.path = "./../data/newProduct.json";
   }
 
   async recovery(path) {
@@ -55,12 +55,16 @@ class ProductManager {
       stock,
     };
     this.products.push(newProduct);
+    console.log(`Producto creado :`, newProduct);
   }
 
   //Mostramos los productos agregados.
   getProduct() {
     console.log("Todos los Productos");
-    this.products.forEach((e) => console.log(e));
+    const p = [];
+    this.products.forEach((e) => {
+      console.log(e);
+    });
   }
 
   getProductById(i) {

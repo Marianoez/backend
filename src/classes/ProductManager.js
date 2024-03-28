@@ -8,8 +8,7 @@ class ProductManager {
 
   constructor() {
     this.products = [];
-    this.path = "./files/newProduct.json";
-    this.pathReset = "./files/backUp.json";
+    this.path = "./../data/newProduct.json";
   }
 
   async recovery(path) {
@@ -56,12 +55,16 @@ class ProductManager {
       stock,
     };
     this.products.push(newProduct);
+    console.log(`Producto creado :`, newProduct);
   }
 
   //Mostramos los productos agregados.
   getProduct() {
     console.log("Todos los Productos");
-    this.products.forEach((e) => console.log(e));
+    const p = [];
+    this.products.forEach((e) => {
+      console.log(e);
+    });
   }
 
   getProductById(i) {
@@ -91,34 +94,7 @@ class ProductManager {
       const ni = this.products.findIndex((e) => e.id == id);
       console.log(`El index es ${ni}`);
       this.products.splice([ni], 1);
-      this.saveFile();
-    } else {
-      console.log(`El ID ${id} no corresponde a ningun producto.`);
-    }
-  }
-
-  updateProduct(id, objUptd = {}) {
-    let propertiesAllowed = [
-      "title",
-      "description",
-      "price",
-      "thumbnail",
-      "code",
-      "stock",
-    ];
-    let validation = true;
-    let properties = Object.keys(objUptd);
-
-    if (properties.includes("id") || propertiesAllowed.includes(!properties)) {
-      validation = false;
-      console.log("No esta permitido cambiar los IDs.");
-    } else if (this.products.find((e) => e.id == id) && validation) {
-      const ni = this.products.findIndex((e) => e.id == id);
-      let obj = this.products[ni];
-      properties.forEach((prop) => {
-        obj[prop] = objUptd[prop];
-      });
-      this.products.splice([ni], 1, obj);
+      this.getProduct();
       this.saveFile();
     } else {
       console.log(`El ID ${id} no corresponde a ningun producto.`);
@@ -130,12 +106,6 @@ class ProductManager {
     fs.writeFileSync(this.path, JSON.stringify(this.products), {
       encoding: "utf8",
     });
-  }
-
-  //Reset de la db
-  resetDb() {
-    const db = fs.readFileSync(this.pathReset, { encoding: "utf-8" });
-    fs.writeFileSync(this.path, db);
   }
 }
 

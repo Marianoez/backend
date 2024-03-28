@@ -8,7 +8,7 @@ class ProductManager {
 
   constructor() {
     this.products = [];
-    this.path = "./../data/newProduct.json";
+    //this.path = "./../data/newProduct.json";
   }
 
   async recovery(path) {

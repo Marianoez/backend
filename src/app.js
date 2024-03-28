@@ -8,15 +8,15 @@ const ProductManager = new PManager();
 
 app.get("/", (req, res) => {
   res.send("Working perfectly");
-});
-
-app.get("/home", (req, res) => {
-  res.send("Working perfectly");
+  /* res.status(200).send("Working well"); */
 });
 
 app.get("/productos", async (req, res) => {
-  await ProductManager.recovery();
-  //let productos = await ProductManager.getProduct();
+  await ProductManager.recovery(
+    "C:UsersMarianodesktop\backend\test-1data\newProduct.json"
+  );
+  let productos = await ProductManager.getProduct();
+  console.log("sdsdsdsdsdsddddddddddd");
   res.json(productos);
 });
 

@@ -5,16 +5,8 @@ const ProductManager = require("./ProductManager");
 const p1 = new ProductManager();
 
 async function exe() {
-  await p1.recovery();
-  await p1.addProduct(
-    "Pc Gamer",
-    "Pc gamer con monitor y placa de video RTX",
-    2000,
-    "www.outlook.com.ar",
-    "d112444",
-    20
-  );
-  await p1.getProduct();
+  await p1.recovery("./../data/newProduct.json");
+  console.log(p1);
 }
 exe();
 

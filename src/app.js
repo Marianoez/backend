@@ -16,8 +16,17 @@ app.get("/home", (req, res) => {
 
 app.get("/productos", async (req, res) => {
   await ProductManager.recovery();
-  //let productos = await ProductManager.getProduct();
+  let productos = await ProductManager.getProduct();
   res.json(productos);
+});
+
+app.get("/productos/:id", async (req, res) => {
+  await ProductManager.recovery();
+  let id = req.params.id;
+  let prod = await ProductManager.getNameById(id);
+  console.log(prod);
+
+  res.json(prod);
 });
 
 app.listen(PORT, () => {

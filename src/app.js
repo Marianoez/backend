@@ -1,5 +1,5 @@
 const express = require("express");
-const PManager = require("./classes/ProductManager");
+const PManager = require("./dao/ProductManager");
 const PORT = 3000;
 
 const app = express();

@@ -8,10 +8,10 @@ class ProductManager {
 
   constructor() {
     this.products = [];
-    this.path = "./../data/newProduct.json";
+    this.path = "../data/newProduct.json";
   }
 
-  async recovery(path) {
+  async recovery() {
     try {
       const data = await fs.promises.readFile(this.path, {
         encoding: "utf-8",
@@ -19,15 +19,23 @@ class ProductManager {
 
       this.products = JSON.parse(data);
 
-      ProductManager.productId = this.products.length;
+      ProductManager.productId = this.products.length + 1;
 
       //console.log("ESTE ES MI PRODUCTID ACTUAL: ", ProductManager.productId);
     } catch (err) {
-      console.error(`Error al recuperar los productos: ${err.message}`);
+      throw new Error(`Error al recuperar los productos: ${err.message}`);
     }
   }
 
-  addProduct(title, description, price, thumbnail, code, stock) {
+  //crear archivo con los nuevos productos.
+  // TODO : Cambiar a asincronia
+  saveFile() {
+    fs.writeFileSync(this.path, JSON.stringify(this.products), {
+      encoding: "utf8",
+    });
+  }
+
+  addProduct({ title, description, price, thumbnail, code, stock }) {
     //Inicializamos producId en +1 y hacemos que sea autoincrementable.
     ProductManager.productId = ProductManager.productId + 1;
     //Le damos el valor de productId al ID de nuestro Nuevo Producto.
@@ -35,18 +43,19 @@ class ProductManager {
 
     //Validamos que todos los campos sean provistos.
     if (!title || !description || !price || !thumbnail || !code || !stock)
-      return console.log("Alguno de los parametros no fueron asignados.");
+      throw new Error("Alguno de los parametros no fueron asignados.");
 
     //Validamos que el code no se repita.
     const repiteCode = this.products.some((p) => p.code == code);
+
     if (repiteCode)
-      return console.log(
+      throw new Error(
         "Codigo existente en otro producto, ingrese un codigo distinto por favor."
       );
 
     //Inicializamos el nuevo producto.
     const newProduct = {
-      id,
+      id: ProductManager.productId + 1,
       title,
       description,
       price,
@@ -54,26 +63,26 @@ class ProductManager {
       code,
       stock,
     };
+
     this.products.push(newProduct);
-    console.log(`Producto creado :`, newProduct);
+
+    this.saveFile();
+
+    return newProduct;
   }
 
   //Mostramos los productos agregados.
-  getProduct() {
-    console.log("Todos los Productos");
-    const p = [];
-    this.products.forEach((e) => {
-      console.log(e);
-    });
+  async getProduct() {
+    return this.products;
   }
 
-  getProductById(i) {
-    const pId = this.products.find((e) => e.id == i);
-    if (pId) {
-      return console.log(pId);
+  async getProductById(id) {
+    const productId = this.products.find((e) => e.id == id);
+    if (productId) {
+      return productId;
     } else {
-      return console.log(
-        `El id ${i} no coincide con ningun producto de la base de datos.`
+      throw new Error(
+        `El id ${id} no coincide con ningun producto de la base de datos.`
       );
     }
   }
@@ -88,24 +97,47 @@ class ProductManager {
     }
   }
 
-  //Borrar Producto
-  delete(id) {
-    if (this.products.find((e) => e.id == id)) {
+  updateProduct(id, objUptd = {}) {
+    let propertiesAllowed = [
+      "title",
+      "description",
+      "price",
+      "thumbnail",
+      "code",
+      "stock",
+    ];
+    let validation = true;
+    let properties = Object.keys(objUptd);
+
+    if (properties.includes("id") || propertiesAllowed.includes(!properties)) {
+      validation = false;
+      console.log("No esta permitido cambiar los IDs.");
+    } else if (this.products.find((e) => e.id == id) && validation) {
       const ni = this.products.findIndex((e) => e.id == id);
-      console.log(`El index es ${ni}`);
-      this.products.splice([ni], 1);
-      this.getProduct();
+      let obj = this.products[ni];
+      properties.forEach((prop) => {
+        obj[prop] = objUptd[prop];
+      });
+      this.products.splice([ni], 1, obj);
+      //console.log(this.products.splice([ni], 1, obj));
       this.saveFile();
+      return this.products;
     } else {
       console.log(`El ID ${id} no corresponde a ningun producto.`);
     }
   }
 
-  //crear archivo con los nuevos productos.
-  saveFile() {
-    fs.writeFileSync(this.path, JSON.stringify(this.products), {
-      encoding: "utf8",
-    });
+  delete(id) {
+    const productIndex = this.products.findIndex((e) => e.id == id);
+
+    if (productIndex === -1)
+      throw new Error(`El ID ${id} no corresponde a ningun producto.`);
+
+    this.products.splice([productIndex], 1);
+
+    this.saveFile();
+
+    return id;
   }
 }
 

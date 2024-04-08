@@ -19,7 +19,7 @@ class ProductManager {
 
       this.products = JSON.parse(data);
 
-      ProductManager.productId = this.products.length;
+      ProductManager.productId = this.products.length + 1;
 
       //console.log("ESTE ES MI PRODUCTID ACTUAL: ", ProductManager.productId);
     } catch (err) {

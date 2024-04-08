@@ -97,6 +97,36 @@ class ProductManager {
     }
   }
 
+  updateProduct(id, objUptd = {}) {
+    let propertiesAllowed = [
+      "title",
+      "description",
+      "price",
+      "thumbnail",
+      "code",
+      "stock",
+    ];
+    let validation = true;
+    let properties = Object.keys(objUptd);
+
+    if (properties.includes("id") || propertiesAllowed.includes(!properties)) {
+      validation = false;
+      console.log("No esta permitido cambiar los IDs.");
+    } else if (this.products.find((e) => e.id == id) && validation) {
+      const ni = this.products.findIndex((e) => e.id == id);
+      let obj = this.products[ni];
+      properties.forEach((prop) => {
+        obj[prop] = objUptd[prop];
+      });
+      this.products.splice([ni], 1, obj);
+      //console.log(this.products.splice([ni], 1, obj));
+      this.saveFile();
+      return this.products;
+    } else {
+      console.log(`El ID ${id} no corresponde a ningun producto.`);
+    }
+  }
+
   delete(id) {
     const productIndex = this.products.findIndex((e) => e.id == id);
 

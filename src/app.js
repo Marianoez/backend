@@ -66,6 +66,18 @@ app.delete("/productos/:id", async (req, res) => {
   }
 });
 
+app.put("/productos/:pid", async (req, res) => {
+  try {
+    let { pid } = req.params;
+    let pUpdate = ProductManager.updateProduct(pid);
+    return pUpdate;
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Error en el servidor",
+    });
+  }
+});
+
 app.listen(PORT, async () => {
   try {
     await ProductManager.recovery();

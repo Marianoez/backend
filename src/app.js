@@ -6,6 +6,9 @@ const app = express();
 
 const ProductManager = new PManager();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.get("/", (req, res) => {
   res.send("Working perfectly");
 });
@@ -15,20 +18,59 @@ app.get("/home", (req, res) => {
 });
 
 app.get("/productos", async (req, res) => {
-  await ProductManager.recovery();
-  let productos = await ProductManager.getProduct();
-  res.json(productos);
+  try {
+    let productos = await ProductManager.getProduct();
+    res.status(200).json(productos);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Error en el servidor",
+    });
+  }
 });
 
 app.get("/productos/:id", async (req, res) => {
-  await ProductManager.recovery();
-  let id = req.params.id;
-  let prod = await ProductManager.getNameById(id);
-  console.log(prod);
+  try {
+    let { id } = req.params;
+    let prod = await ProductManager.getProductById(id);
 
-  res.json(prod);
+    res.status(200).json(prod);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Error en el servidor",
+    });
+  }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server runing on Port ${PORT} `);
+app.post("/productos", async (req, res) => {
+  try {
+    let newProduct = ProductManager.addProduct(req.body);
+
+    return res.status(200).json(newProduct);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Error en el servidor",
+    });
+  }
+});
+
+app.delete("/productos/:id", async (req, res) => {
+  try {
+    let { id } = req.params;
+    let prodId = ProductManager.delete(id);
+
+    res.status(200).json({ message: `Product ${prodId} deleted` });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Error en el servidor",
+    });
+  }
+});
+
+app.listen(PORT, async () => {
+  try {
+    await ProductManager.recovery();
+    console.log(`Server runing on Port ${PORT}`);
+  } catch (error) {
+    console.log(error);
+  }
 });

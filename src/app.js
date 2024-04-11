@@ -1,5 +1,6 @@
 const express = require("express");
 const PManager = require("./dao/ProductManager");
+const CartManager = require("./dao/CartManager.js");
 const PORT = 3000;
 
 const app = express();
@@ -17,7 +18,7 @@ app.get("/home", (req, res) => {
   res.send("Working perfectly");
 });
 
-app.get("/productos", async (req, res) => {
+app.get("/api/productos", async (req, res) => {
   try {
     let productos = await ProductManager.getProduct();
     res.status(200).json(productos);
@@ -28,7 +29,7 @@ app.get("/productos", async (req, res) => {
   }
 });
 
-app.get("/productos/:id", async (req, res) => {
+app.get("/api/productos/:id", async (req, res) => {
   try {
     let { id } = req.params;
     let prod = await ProductManager.getProductById(id);
@@ -41,7 +42,7 @@ app.get("/productos/:id", async (req, res) => {
   }
 });
 
-app.post("/productos", async (req, res) => {
+app.post("/api/productos", async (req, res) => {
   try {
     let newProduct = ProductManager.addProduct(req.body);
 
@@ -53,7 +54,7 @@ app.post("/productos", async (req, res) => {
   }
 });
 
-app.delete("/productos/:id", async (req, res) => {
+app.delete("/api/productos/:id", async (req, res) => {
   try {
     let { id } = req.params;
     let prodId = ProductManager.delete(id);
@@ -66,7 +67,7 @@ app.delete("/productos/:id", async (req, res) => {
   }
 });
 
-app.put("/productos/:pid", async (req, res) => {
+app.put("/api/productos/:pid", async (req, res) => {
   try {
     let { pid } = req.params;
     let q = req.body;
@@ -79,6 +80,22 @@ app.put("/productos/:pid", async (req, res) => {
       error: error.message || "Error en el servidor",
     });
   }
+});
+
+app.get("/api/carts", (req, res) => {
+  const { cid } = req.params;
+  return res.json({});
+});
+
+app.get("/api/carts/:cid", (req, res) => {
+  const { cid } = req.params;
+  return res.json({});
+});
+
+app.post("/api/carts", (req, res) => {
+  const c = new CartManager();
+  const cart = c.createCart();
+  return res.json({ cart });
 });
 
 app.listen(PORT, async () => {

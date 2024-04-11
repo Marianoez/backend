@@ -7,11 +7,8 @@ const p1 = new ProductManager();
 async function exe() {
   await p1.recovery();
   console.log(p1);
-  await p1.updateProduct(2, {
-    title: "WWWWwsssssss....................................",
-    price: 5000,
-    thumbnail: "www.youtube.com///////////////////////////////////",
-    stock: 2,
+  await p1.updateProduct(9, {
+    title: "NUEVO NOMBRE PRUEBA",
   });
 }
 exe();

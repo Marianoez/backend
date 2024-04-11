@@ -29,16 +29,9 @@ app.get("/productos", async (req, res) => {
 });
 
 app.get("/productos/:id", async (req, res) => {
-<<<<<<< HEAD
-  await ProductManager.recovery();
-  let id = req.params.id;
-  let prod = await ProductManager.getProductById(id);
-  console.log(prod);
-=======
   try {
     let { id } = req.params;
     let prod = await ProductManager.getProductById(id);
->>>>>>> test1
 
     res.status(200).json(prod);
   } catch (error) {
@@ -48,31 +41,6 @@ app.get("/productos/:id", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-/* app.post("/productos", async (req, res) => {
-  try {
-    let newProduct = await ProductManager.addProduct({
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-    });
-
-    res.setHeader("Content-Type", "aplication/json");
-    return res.status(200).json(newProduct);
-  } catch (error) {
-    res.setHeader("Content-Type", "aplication/json");
-    return res.status(500).json({
-      error: "Error en el servidor",
-    });
-  }
-}); */
-
-app.listen(PORT, () => {
-  console.log(`Server runing on Port ${PORT}`);
-=======
 app.post("/productos", async (req, res) => {
   try {
     let newProduct = ProductManager.addProduct(req.body);
@@ -101,8 +69,11 @@ app.delete("/productos/:id", async (req, res) => {
 app.put("/productos/:pid", async (req, res) => {
   try {
     let { pid } = req.params;
-    let pUpdate = ProductManager.updateProduct(pid);
-    return pUpdate;
+    let q = req.body;
+    const p = new PManager();
+    const pUpdate = p.updateProduct(Number(pid), q);
+
+    return res.json({ pUpdate });
   } catch (error) {
     res.status(500).json({
       error: error.message || "Error en el servidor",
@@ -117,5 +88,4 @@ app.listen(PORT, async () => {
   } catch (error) {
     console.log(error);
   }
->>>>>>> test1
 });

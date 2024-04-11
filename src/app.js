@@ -84,17 +84,20 @@ app.put("/api/productos/:pid", async (req, res) => {
 
 app.get("/api/carts", (req, res) => {
   const { cid } = req.params;
+  console.log("sadadasdasd");
   return res.json({});
 });
 
 app.get("/api/carts/:cid", (req, res) => {
   const { cid } = req.params;
-  return res.json({});
+  res.json(cid);
 });
 
 app.post("/api/carts", (req, res) => {
   const c = new CartManager();
+  c.recovery();
   const cart = c.createCart();
+  console.log("algo anda aunque sea");
   return res.json({ cart });
 });
 

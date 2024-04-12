@@ -70,9 +70,9 @@ app.delete("/api/productos/:id", async (req, res) => {
 app.put("/api/productos/:pid", async (req, res) => {
   try {
     let { pid } = req.params;
-    let q = req.body;
     const p = new PManager();
-    const pUpdate = p.updateProduct(Number(pid), req.body);
+    await p.recovery();
+    const pUpdate = await p.updateProduct(Number(pid), req.body);
 
     return res.json({ pUpdate });
   } catch (error) {

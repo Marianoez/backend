@@ -97,7 +97,7 @@ class ProductManager {
     }
   }
 
-  updateProduct(id, objUptd) {
+  async updateProduct(id, objUptd) {
     let propertiesAllowed = [
       "title",
       "description",
@@ -108,15 +108,12 @@ class ProductManager {
     ];
     let validation = true;
     let properties = Object.keys(objUptd);
-    console.log(objUptd);
+    /* console.log(objUptd);
     console.log(typeof objUptd);
     console.log("properties del objeto 1", properties);
     console.log("propertues del objeto 2", propertiesAllowed);
     console.log(typeof propertiesAllowed);
-    if (properties === propertiesAllowed) {
-      console.log("SON IGUALES");
-    }
-    console.log(properties == propertiesAllowed);
+    console.log(properties == propertiesAllowed); */
 
     if (properties.includes("id") || propertiesAllowed.includes(!properties)) {
       validation = false;

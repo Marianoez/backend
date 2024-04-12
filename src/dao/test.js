@@ -8,7 +8,7 @@ async function exe() {
   await p1.recovery();
   console.log(p1);
   await p1.updateProduct(9, {
-    title: "NUEVO NOMBRE PRUEBA",
+    title: "NUEVO NOMBRE PRUEBAaaaaaaa",
   });
 }
 exe();

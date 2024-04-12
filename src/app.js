@@ -72,7 +72,7 @@ app.put("/api/productos/:pid", async (req, res) => {
     let { pid } = req.params;
     let q = req.body;
     const p = new PManager();
-    const pUpdate = p.updateProduct(Number(pid), q);
+    const pUpdate = p.updateProduct(Number(pid), req.body);
 
     return res.json({ pUpdate });
   } catch (error) {

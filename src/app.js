@@ -1,11 +1,13 @@
 const express = require("express");
 const PManager = require("./dao/ProductManager");
-const CartManager = require("./dao/CartManager.js");
+const CartManager = require("./dao/CartManager");
 const PORT = 3000;
 
 const app = express();
 
 const ProductManager = new PManager();
+
+const CManager = new CartManager();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -82,24 +84,49 @@ app.put("/api/productos/:pid", async (req, res) => {
   }
 });
 
-app.get("/api/carts", (req, res) => {
-  const { cid } = req.params;
-  console.log("sadadasdasd");
-  return res.json({});
+//Andando
+app.get("/api/carts", async (req, res) => {
+  try {
+    let carts = await CManager.getCart();
+    res.status(200).json(carts);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message || "Error en el servidor",
+    });
+  }
+  /* return res.json(carts); */
 });
 
-app.get("/api/carts/:cid", (req, res) => {
-  const { cid } = req.params;
-  res.json(cid);
+//Andando
+app.get("/api/carts/:cid", async (req, res) => {
+  try {
+    await CManager.getCart();
+    let { cid } = req.params;
+    cartd = await CManager.getCartProductsById(parseInt(cid));
+    return res.json(cartd);
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({
+      error: `Error inesperado en el servidor.`,
+    });
+  }
 });
 
-app.post("/api/carts", (req, res) => {
-  const c = new CartManager();
-  c.recovery();
-  const cart = c.createCart();
-  console.log("algo anda aunque sea");
-  return res.json({ cart });
+//Andando
+app.post("/api/carts", async (req, res) => {
+  try {
+    await CManager.getCart();
+    let nCart = await CManager.createCart();
+    return res.json(nCart);
+  } catch (error) {
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({
+      error: `Error inesperado en el servidor.`,
+    });
+  }
 });
+
+app.post("/api/carts/");
 
 app.listen(PORT, async () => {
   try {

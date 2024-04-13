@@ -1,15 +1,15 @@
+const CartManager = require("./CartManager");
 const ProductManager = require("./ProductManager");
 
 //Pruebas con productos
 
-const p1 = new ProductManager();
+const p1 = new CartManager();
 
 async function exe() {
   await p1.recovery();
-  console.log(p1);
-  await p1.updateProduct(9, {
-    title: "PARLANTE JBL",
-  });
+  p1.createCart({ name: "cosas" });
+  await p1.recovery();
+  await p1.getCart();
 }
 exe();
 

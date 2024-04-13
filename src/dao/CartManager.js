@@ -11,70 +11,50 @@ class CartManager {
     this.path = "../data/carts.json";
   }
 
-  createCart() {
+  createCart(cart = {}) {
+    this.getCart();
+
+    let id = 1;
+
+    if (this.carts.length > 0) {
+      id = Math.max(...this.carts.map((d) => d.id)) + 1;
+    }
+    console.log(id);
+
     const newCart = {
-      id: this.cartId,
+      id: id,
       products: [],
     };
+
     this.carts.push(newCart);
+
     this.saveFile();
-
-    console.log("ASSSSSSSSSSSSSSSSSSSSS");
-
+    console.log(newCart);
     return newCart;
   }
 
-  async recovery() {
-    try {
-      const data = await fs.promises.readFile(this.path, {
-        encoding: "utf-8",
-      });
-
-      this.carts = JSON.parse(data);
-
-      CartManager.cartId = this.carts.length + 1;
-
-      //console.log("ESTE ES MI cartId ACTUAL: ", CartManager.cartId);
-    } catch (err) {
-      throw new Error(`Error al recuperar los productos: ${err.message}`);
-    }
-  }
-
-  //crear archivo con los nuevos productos.
-  // TODO : Cambiar a asincronia
   saveFile() {
     fs.writeFileSync(this.path, JSON.stringify(this.carts), {
       encoding: "utf8",
     });
   }
 
-  addCart({ title, description, price, thumbnail, code, stock }) {
-    //Inicializamos producId en +1 y hacemos que sea autoincrementable.
-    CartManager.cartId = CartManager.cartId + 1;
-    //Le damos el valor de cartId al ID de nuestro Nuevo Producto.
-    const id = CartManager.cartId;
-
+  async addtoCart(id, cartId) {
     //Validamos que todos los campos sean provistos.
-    if (!title || !description || !price || !thumbnail || !code || !stock)
+    if (!product || !quantity)
       throw new Error("Alguno de los parametros no fueron asignados.");
 
     //Validamos que el code no se repita.
     const repiteCode = this.carts.some((p) => p.code == code);
-
-    if (repiteCode)
-      throw new Error(
-        "Codigo existente en otro producto, ingrese un codigo distinto por favor."
-      );
+    let quantity = +1;
+    if (repiteCode) {
+      quantity = quantity + 1;
+    }
 
     //Inicializamos el nuevo producto.
     const newProduct = {
-      id: CartManager.cartId + 1,
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
+      id: id,
+      quantity: 1,
     };
 
     this.carts.push(newProduct);
@@ -86,16 +66,41 @@ class CartManager {
 
   //Mostramos los productos agregados.
   async getCart() {
+    try {
+      const data = await fs.promises.readFile(this.path, {
+        encoding: "utf-8",
+      });
+
+      this.carts = JSON.parse(data);
+
+      //console.log("ESTE ES MI cartId ACTUAL: ", CartManager.cartId);
+    } catch (err) {
+      throw new Error(`Error al recuperar los productos: ${err.message}`);
+    }
     return this.carts;
   }
 
   async getCartById(id) {
     const cartId = this.carts.find((e) => e.id == id);
+    //const products = cartId.products.map((e)=> )
     if (cartId) {
       return cartId;
     } else {
       throw new Error(
-        `El id ${id} no coincide con ningun producto de la base de datos.`
+        `El id ${id} no coincide con ningun Cart de la base de datos.`
+      );
+    }
+  }
+
+  //Listamos productos del carrito con ID correspondiente.
+  async getCartProductsById(id) {
+    const cartId = this.carts.find((e) => e.id == id);
+    //const products = cartId.products.map((e)=> )
+    if (cartId) {
+      return cartId.products;
+    } else {
+      throw new Error(
+        `El id ${id} no coincide con ningun Cart de la base de datos.`
       );
     }
   }

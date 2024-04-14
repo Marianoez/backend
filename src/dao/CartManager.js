@@ -43,11 +43,13 @@ class CartManager {
 
   async addToCart(pid, cid) {
     this.getCart();
-    await pManager.recovery;
-    let product = pManager.getProductById(2);
+    await pManager.recovery();
+    let product = await pManager.getProductById(pid);
+    console.log("Entro a addToCart");
+    console.log(product);
 
     //return console.log(`carrito ${cart}`);
-    return console.log(product);
+    return product;
   }
 
   //Mostramos los productos agregados.

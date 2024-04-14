@@ -41,20 +41,26 @@ class CartManager {
     });
   }
 
-  async addToCart(pid, cid) {
+  async addToCart(cid, pid) {
     await this.getCart();
     await pManager.recovery();
     let product = await pManager.getProductById(pid);
     let cart = await this.getCartById(cid);
     let cartfind = this.carts.find((cart) => cart.id === cid);
-    let cartValidation = cart.products.some((p) => p.id == product.id);
+    let cartValidation = cart.products.some((p) => p.id == pid);
+
+    if (cartValidation) {
+      let findProduct = cartfind.products.find((p) => p.id == product.id);
+      findProduct.quantity = findProduct.quantity + 1;
+    } else {
+      cartfind.products.push({ id: product.id, quantity: 1 });
+    }
 
     console.log("Entro a addToCart");
     console.log(product);
-    console.log(typeof cart.products);
     console.log("cartfind", cartfind);
     console.log("cartValidation", cartValidation);
-    console.log("newtext");
+    console.log("cartfind", cartfind);
 
     //return console.log(`carrito ${cart}`);
     return product;

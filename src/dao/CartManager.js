@@ -46,12 +46,15 @@ class CartManager {
     await pManager.recovery();
     let product = await pManager.getProductById(pid);
     let cart = await this.getCartById(cid);
-    let pValidation = cart.products.some((p) => p.id == product.id);
+    let cartfind = this.carts.find((cart) => cart.id === cid);
+    let cartValidation = cart.products.some((p) => p.id == product.id);
+
     console.log("Entro a addToCart");
     console.log(product);
-    console.log(cart.products);
-    console.log(searchCart);
-    console.log("ssss", pValidation);
+    console.log(typeof cart.products);
+    console.log("cartfind", cartfind);
+    console.log("cartValidation", cartValidation);
+    console.log("newtext");
 
     //return console.log(`carrito ${cart}`);
     return product;

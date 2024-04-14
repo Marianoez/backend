@@ -1,6 +1,8 @@
 const fs = require("fs");
 const { encode } = require("punycode");
 const { config } = require("process");
+const ProductManager = require("./ProductManager");
+const pManager = new ProductManager();
 
 class CartManager {
   carts;
@@ -39,29 +41,13 @@ class CartManager {
     });
   }
 
-  async addtoCart(id, cartId) {
-    //Validamos que todos los campos sean provistos.
-    if (!product || !quantity)
-      throw new Error("Alguno de los parametros no fueron asignados.");
+  async addToCart(pid, cid) {
+    this.getCart();
+    await pManager.recovery;
+    let product = pManager.getProductById(2);
 
-    //Validamos que el code no se repita.
-    const repiteCode = this.carts.some((p) => p.code == code);
-    let quantity = +1;
-    if (repiteCode) {
-      quantity = quantity + 1;
-    }
-
-    //Inicializamos el nuevo producto.
-    const newProduct = {
-      id: id,
-      quantity: 1,
-    };
-
-    this.carts.push(newProduct);
-
-    this.saveFile();
-
-    return newProduct;
+    //return console.log(`carrito ${cart}`);
+    return console.log(product);
   }
 
   //Mostramos los productos agregados.

@@ -84,7 +84,7 @@ app.put("/api/productos/:pid", async (req, res) => {
   }
 });
 
-//Andando
+//Andando GetCarts
 app.get("/api/carts", async (req, res) => {
   try {
     let carts = await CManager.getCart();
@@ -97,12 +97,13 @@ app.get("/api/carts", async (req, res) => {
   /* return res.json(carts); */
 });
 
-//Andando
+//Andando getCartById
 app.get("/api/carts/:cid", async (req, res) => {
   try {
     await CManager.getCart();
     let { cid } = req.params;
     cartd = await CManager.getCartProductsById(parseInt(cid));
+    console.log(cartd);
     return res.json(cartd);
   } catch (error) {
     res.setHeader("Content-Type", "application/json");
@@ -112,7 +113,7 @@ app.get("/api/carts/:cid", async (req, res) => {
   }
 });
 
-//Andando
+//Andando CreateCarts
 app.post("/api/carts", async (req, res) => {
   try {
     await CManager.getCart();
@@ -126,7 +127,20 @@ app.post("/api/carts", async (req, res) => {
   }
 });
 
-app.post("/api/carts/");
+app.post("/api/carts/:cid/products/:pid", async (req, res) => {
+  try {
+    //await CManager.getCart();
+    let cid = Number(req.params.cid);
+    let pid = Number(req.params.pid);
+    console.log("entro");
+    console.log(typeof cid);
+    console.log(typeof pid);
+    let product = await CManager.addToCart(cid, pid);
+    res.json(product);
+  } catch (error) {
+    res.status(300).json({ error: `Error al cargar productos al cart. ` });
+  }
+});
 
 app.listen(PORT, async () => {
   try {

@@ -134,6 +134,7 @@ class ProductManager {
   }
 
   delete(id) {
+    this.recovery();
     const productIndex = this.products.findIndex((e) => e.id == id);
 
     if (productIndex === -1)

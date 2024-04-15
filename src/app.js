@@ -128,7 +128,7 @@ app.post("/api/carts", async (req, res) => {
 });
 
 app.post("/api/carts/:cid/products/:pid", async (req, res) => {
-  try {
+  /* try {
     //await CManager.getCart();
     let cid = Number(req.params.cid);
     let pid = Number(req.params.pid);
@@ -137,6 +137,17 @@ app.post("/api/carts/:cid/products/:pid", async (req, res) => {
     console.log(typeof pid);
     let product = await CManager.addToCart(cid, pid);
     res.json(product);
+  } catch (error) {
+    res.status(300).json({ error: `Error al cargar productos al cart. ` });
+  } */
+  try {
+    let cid = Number(req.params.cid);
+    let pid = Number(req.params.pid);
+    await CManager.addToCart(cid, pid);
+
+    let mostrarCarrito = await CManager.getCartById(cid);
+
+    res.json(mostrarCarrito);
   } catch (error) {
     res.status(300).json({ error: `Error al cargar productos al cart. ` });
   }

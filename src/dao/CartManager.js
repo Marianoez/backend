@@ -35,14 +35,14 @@ class CartManager {
     return newCart;
   }
 
-  saveFile() {
-    fs.writeFileSync(this.path, JSON.stringify(this.carts), {
+  saveFile(data) {
+    fs.writeFileSync(this.path, JSON.stringify(data), {
       encoding: "utf8",
     });
   }
 
   async addToCart(cid, pid) {
-    await this.getCart();
+    /* await this.getCart();
     await pManager.recovery();
     let product = await pManager.getProductById(pid);
     let cart = await this.getCartById(cid);
@@ -61,9 +61,30 @@ class CartManager {
     console.log("cartfind", cartfind);
     console.log("cartValidation", cartValidation);
     console.log("cartfind", cartfind);
+    return product; */
 
-    //return console.log(`carrito ${cart}`);
-    return product;
+    let cart = await this.getCart();
+    await pManager.recovery();
+    let product = await pManager.getProductById(pid);
+    let cartFind = cart.find((cart) => cart.id === cid);
+    let cartValidation = cartFind.products.some((p) => p.id == pid);
+
+    if (!cartFind) {
+      return `Cart ${cid} not found`;
+    }
+
+    if (!product) {
+      return `Product ${pid} not found`;
+    }
+
+    if (cartValidation) {
+      let findProduct = cartFind.products.find((p) => p.id == pid);
+      findProduct.quantity = findProduct.quantity + 1;
+    } else {
+      cartFind.products.push({ id: product.id, quantity: 1 });
+    }
+
+    await this.saveFile(cart);
   }
 
   //Mostramos los productos agregados.

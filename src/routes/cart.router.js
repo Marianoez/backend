@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+//Andando post -
 router.post("/:cid/products/:pid", async (req, res) => {
   try {
     let cid = Number(req.params.cid);

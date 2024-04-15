@@ -13,8 +13,12 @@ class CartManager {
     this.path = "../data/carts.json";
   }
 
-  createCart(cart = {}) {
+  createCart() {
     this.getCart();
+
+    console.log("Entro a funcion");
+    console.log(this.carts);
+    console.log(this.carts.length);
 
     let id = 1;
 
@@ -27,11 +31,10 @@ class CartManager {
       id: id,
       products: [],
     };
-
+    console.log(newCart);
     this.carts.push(newCart);
 
-    this.saveFile();
-    console.log(newCart);
+    this.saveFile(this.carts);
     return newCart;
   }
 

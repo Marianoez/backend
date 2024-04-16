@@ -128,6 +128,7 @@ class ProductManager {
       //console.log(this.products.splice([ni], 1, obj));
       this.saveFile();
       //return this.products;
+      return this.products[ni];
     } else {
       console.log(`El ID ${id} no corresponde a ningun producto.`);
     }

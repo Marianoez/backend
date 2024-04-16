@@ -60,9 +60,7 @@ router.put("/:pid", async (req, res) => {
   try {
     await PManager.recovery();
     let { pid } = req.params;
-    const p = new PManager();
-    await p.recovery();
-    const pUpdate = await p.updateProduct(Number(pid), req.body);
+    const pUpdate = await PManager.updateProduct(Number(pid), req.body);
 
     return res.json({ pUpdate });
   } catch (error) {

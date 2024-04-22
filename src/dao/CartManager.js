@@ -1,6 +1,4 @@
 const fs = require("fs");
-const { encode } = require("punycode");
-const { config } = require("process");
 const ProductManager = require("./ProductManager");
 const pManager = new ProductManager();
 const path = "path";
@@ -9,17 +7,17 @@ class CartManager {
   carts;
   static cartId = 0;
 
-  constructor() {
+  constructor(route) {
     this.carts = [];
-    this.path = "../data/carts.json";
+    this.path = route;
   }
 
   createCart() {
     this.getCart();
 
-    console.log("Entro a funcion");
+    /* console.log("Entro a funcion");
     console.log(this.carts);
-    console.log(this.carts.length);
+    console.log(this.carts.length); */
 
     let id = 1;
 

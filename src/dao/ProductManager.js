@@ -1,25 +1,33 @@
 const fs = require("fs");
-const { encode } = require("punycode");
-const { config } = require("process");
 
 class ProductManager {
   products;
   static productId = 0;
 
-  constructor() {
+  constructor(route) {
     this.products = [];
-    this.path = "../data/newProduct.json";
+    this.path = route;
   }
 
   async recovery() {
     try {
-      const data = await fs.promises.readFile(this.path, {
-        encoding: "utf-8",
-      });
+      if (fs.existsSync(this.path)) {
+        const data = await fs.promises.readFile(this.path, {
+          encoding: "utf-8",
+        });
 
-      this.products = JSON.parse(data);
+        this.products = JSON.parse(data);
 
-      ProductManager.productId = this.products.length + 1;
+        // ProductManager.productId = this.products.length + 1;
+      } else {
+        this.products = [];
+      }
+
+      let id = 1;
+      if (this.products.length > 0) {
+        id = Math.max(...this.products.map((d) => d.id)) + 1;
+      }
+      ProductManager.productId = id;
 
       //console.log("ESTE ES MI PRODUCTID ACTUAL: ", ProductManager.productId);
     } catch (err) {
@@ -29,17 +37,19 @@ class ProductManager {
 
   //crear archivo con los nuevos productos.
   // TODO : Cambiar a asincronia
-  saveFile() {
+  async saveFile() {
     fs.writeFileSync(this.path, JSON.stringify(this.products), {
       encoding: "utf8",
     });
   }
 
-  addProduct({ title, description, price, thumbnail, code, stock }) {
+  async addProduct({ title, description, price, thumbnail, code, stock }) {
     //Inicializamos producId en +1 y hacemos que sea autoincrementable.
-    ProductManager.productId = ProductManager.productId + 1;
+    // ProductManager.productId = ProductManager.productId + 1;
     //Le damos el valor de productId al ID de nuestro Nuevo Producto.
     const id = ProductManager.productId;
+
+    console.log(title, description, price, thumbnail, code, stock);
 
     //Validamos que todos los campos sean provistos.
     if (!title || !description || !price || !thumbnail || !code || !stock)
@@ -55,7 +65,7 @@ class ProductManager {
 
     //Inicializamos el nuevo producto.
     const newProduct = {
-      id: ProductManager.productId + 1,
+      id, //: ProductManager.productId + 1,
       title,
       description,
       price,

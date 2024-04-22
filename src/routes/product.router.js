@@ -1,73 +1,86 @@
 const ProductManager = require("../dao/ProductManager.js");
 const Router = require("express").Router;
 const router = Router();
-const PManager = new ProductManager();
+const path = require("path");
+const routeProd = path.join(__dirname, "../data/products.json");
 
-router.get("/", async (req, res) => {
+const enviromentExe = async () => {
+  const productManager = new ProductManager(routeProd);
   try {
-    await PManager.recovery();
-    let productos = await PManager.getProduct();
-    res.status(200).json(productos);
+    await productManager.recovery();
   } catch (error) {
-    res.status(500).json({
-      error: error.message || "Error en el servidor",
-    });
+    console.log(error.message);
+    return;
   }
-});
 
-router.get("/:id", async (req, res) => {
-  try {
-    await PManager.recovery();
-    let { id } = req.params;
-    let prod = await PManager.getProductById(id);
+  router.get("/", async (req, res) => {
+    try {
+      let productos = await productManager.getProduct();
+      /* res.setHeader("content-type", "text/html"); */
+      res.status(200).json(productos);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message || "Error en el servidor",
+      });
+    }
+  });
 
-    res.status(200).json(prod);
-  } catch (error) {
-    res.status(500).json({
-      error: error.message || "Error en el servidor",
-    });
-  }
-});
+  router.get("/:id", async (req, res) => {
+    try {
+      await productManager.recovery();
+      let { id } = req.params;
+      let prod = await productManager.getProductById(id);
 
-router.post("/", async (req, res) => {
-  try {
-    await PManager.recovery();
-    let newProduct = PManager.addProduct(req.body);
+      res.status(200).json(prod);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message || "Error en el servidor",
+      });
+    }
+  });
 
-    return res.status(200).json(newProduct);
-  } catch (error) {
-    res.status(500).json({
-      error: error.message || "Error en el servidor",
-    });
-  }
-});
+  router.post("/", async (req, res) => {
+    try {
+      await productManager.recovery();
+      let newProduct = productManager.addProduct(req.body);
 
-router.delete("/:id", async (req, res) => {
-  try {
-    await PManager.recovery();
-    let { id } = req.params;
-    let prodId = PManager.delete(id);
+      return res.status(200).json(newProduct);
+    } catch (error) {
+      res.status(500).json({
+        error: error.message || "Error en el servidor",
+      });
+    }
+  });
 
-    res.status(200).json({ message: `Product ${prodId} deleted` });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message || "Error en el servidor",
-    });
-  }
-});
+  router.delete("/:id", async (req, res) => {
+    try {
+      await productManager.recovery();
+      let { id } = req.params;
+      let prodId = productManager.delete(id);
 
-router.put("/:pid", async (req, res) => {
-  try {
-    await PManager.recovery();
-    let { pid } = req.params;
-    const pUpdate = await PManager.updateProduct(Number(pid), req.body);
+      res.status(200).json({ message: `Product ${prodId} deleted` });
+    } catch (error) {
+      res.status(500).json({
+        error: error.message || "Error en el servidor",
+      });
+    }
+  });
 
-    return res.json({ pUpdate });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message || "Error en el servidor",
-    });
-  }
-});
+  router.put("/:pid", async (req, res) => {
+    try {
+      await productManager.recovery();
+      let { pid } = req.params;
+      const pUpdate = await productManager.updateProduct(Number(pid), req.body);
+
+      return res.json({ pUpdate });
+    } catch (error) {
+      res.status(500).json({
+        error: error.message || "Error en el servidor",
+      });
+    }
+  });
+};
+
+enviromentExe();
 
 module.exports = router;

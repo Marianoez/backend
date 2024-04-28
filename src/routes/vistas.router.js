@@ -35,38 +35,6 @@ const vistasEnviroment = async () => {
       });
     }
   });
-  // New Product
-  router.post("/realTimeProducts", async (req, res) => {
-    try {
-      await productManager.recovery();
-      let newProduct = productManager.addProduct(req.body);
-      let newp = productManager.getProduct();
-      req.io.emit("NewProduct", newp);
-
-      return res.json({ payload: `Product Added` });
-    } catch (error) {
-      res.status(500).json({
-        error: error.message || "Error en el servidor",
-      });
-    }
-  });
-
-  //Delete Product
-  router.delete("/realTimeProducts/:id", async (req, res) => {
-    try {
-      await productManager.recovery();
-      let { id } = req.params;
-      let prodId = productManager.delete(id);
-      const products = productManager.getProduct();
-      req.io.emit("ProductDelete", products);
-
-      res.status(200).json({ message: `Product ${prodId} deleted` });
-    } catch (error) {
-      res.status(500).json({
-        error: error.message || "Error en el servidor",
-      });
-    }
-  });
 };
 vistasEnviroment();
 

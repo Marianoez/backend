@@ -38,18 +38,17 @@ const vistasEnviroment = async () => {
   // New Product
   router.post("/realTimeProducts", async (req, res) => {
     try {
-      //const productManager = new ProductManager(routeProd);
       await productManager.recovery();
       let newProduct = productManager.addProduct(req.body);
+      let newp = productManager.getProduct();
+      req.io.emit("NewProduct", newp);
 
-      return res.status(200).json(newProduct);
+      return res.json({ payload: `Product Added` });
     } catch (error) {
       res.status(500).json({
         error: error.message || "Error en el servidor",
       });
     }
-
-    req.io.emit("NewProduct", newProduct);
   });
 
   //Delete Product
@@ -58,6 +57,8 @@ const vistasEnviroment = async () => {
       await productManager.recovery();
       let { id } = req.params;
       let prodId = productManager.delete(id);
+      const products = productManager.getProduct();
+      req.io.emit("ProductDelete", products);
 
       res.status(200).json({ message: `Product ${prodId} deleted` });
     } catch (error) {
@@ -65,9 +66,6 @@ const vistasEnviroment = async () => {
         error: error.message || "Error en el servidor",
       });
     }
-    const products = productManager.getProduct();
-
-    req.io.emit("ProductDelete", products);
   });
 };
 vistasEnviroment();

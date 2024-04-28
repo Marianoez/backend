@@ -1,24 +1,20 @@
 <h1>Real Time Products</h1>
 
 <div id="container">
-    <div>        
-        <ul id="products">
-            {{#each productos}}
-            <li>
-                <p>{{title}}</p>
-                <h5>Precio $ {{price}}</h5>
-                <p>{{code}}</p>
-            </li>           
-            {{/each}}
-        </ul>        
-    </div>
+  <div>
+    <ul id="products">
+      {{#each productos}}
+        <li>
+          <p>{{title}}</p>
+          <h5>Precio $ {{price}}</h5>
+          <p>{{code}}</p>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
 </div>
-
-
-
-
 
 <a href="/">Home</a>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="../public/realTime.js"></script>
+<script src="/js/realTime.js"></script>

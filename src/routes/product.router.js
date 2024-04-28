@@ -44,7 +44,7 @@ const enviromentExe = async () => {
       await productManager.recovery();
       productManager.addProduct(req.body);
 
-      let newp = productManager.getProduct();
+      let newp = await productManager.getProduct();
       req.io.emit("NewProduct", newp);
 
       return res.json({ payload: `Product Added` });
@@ -63,7 +63,7 @@ const enviromentExe = async () => {
       let { id } = req.params;
       let prodId = productManager.delete(id);
 
-      const products = productManager.getProduct();
+      const products = await productManager.getProduct();
       req.io.emit("ProductDelete", products);
 
       res.status(200).json({ message: `Product ${prodId} deleted` });

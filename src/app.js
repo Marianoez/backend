@@ -22,13 +22,26 @@ app.set("views", path.join(__dirname, "/views"));
 app.use(express.static(path.join(__dirname, "/public")));
 
 //Router
-app.use("/api/products", ProductRouter);
-app.use("/api/carts", CartRouter);
+app.use(
+  "/api/products",
+  (req, res, next) => {
+    req.io = io;
+    next();
+  },
+  ProductRouter
+);
+app.use(
+  "/api/carts",
+  (req, res, next) => {
+    req.io = io;
+    next();
+  },
+  CartRouter
+);
 app.use(
   "/",
   (req, res, next) => {
     req.io = io;
-
     next();
   },
   vistasRouter
@@ -40,4 +53,4 @@ const serverHTTP = app.listen(PORT, () =>
 );
 
 //Server Websocket
-const io = new Server(serverHTTP);
+let io = new Server(serverHTTP);

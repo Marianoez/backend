@@ -42,9 +42,14 @@ const enviromentExe = async () => {
   router.post("/", async (req, res) => {
     try {
       await productManager.recovery();
-      let newProduct = productManager.addProduct(req.body);
+      productManager.addProduct(req.body);
 
-      return res.status(200).json(newProduct);
+      let newp = productManager.getProduct();
+      req.io.emit("NewProduct", newp);
+
+      return res.json({ payload: `Product Added` });
+
+      //return res.status(200).json(newProduct);
     } catch (error) {
       res.status(500).json({
         error: error.message || "Error en el servidor",
@@ -57,6 +62,9 @@ const enviromentExe = async () => {
       await productManager.recovery();
       let { id } = req.params;
       let prodId = productManager.delete(id);
+
+      const products = productManager.getProduct();
+      req.io.emit("ProductDelete", products);
 
       res.status(200).json({ message: `Product ${prodId} deleted` });
     } catch (error) {

@@ -5,6 +5,7 @@ const { router: vistasRouter } = require("./routes/vistas.router.js");
 const engine = require("express-handlebars").engine;
 const path = require("path");
 const { Server } = require("socket.io");
+const mongoose = require("mongoose");
 
 const PORT = 3000;
 
@@ -54,3 +55,18 @@ const serverHTTP = app.listen(PORT, () =>
 
 //Server Websocket
 let io = new Server(serverHTTP);
+
+const connDB = async () => {
+  try {
+    await mongoose.connect(
+      "mongodb+srv://Mariano:464518@cluster0.9wd9taq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+      {
+        dbName: "ecommerce",
+      }
+    );
+    console.log("Db Connected");
+  } catch (error) {
+    console.log("Error al conectar a la DB", error.message);
+  }
+};
+connDB();

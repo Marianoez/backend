@@ -1,0 +1,95 @@
+db.heroes.find({powers:{$size:3}, id:{$gte:10}})
+db.heroes.find({powers:{$size:3}})
+
+https://www.mongodb.com/docs/manual/reference/operator/query/
+
+
+db.heroes.find({powers:{$all:["Shape-shifting", "Telepathy"]}})
+db.heroes.find({enemies:{$elemMatch: {name:"Joker"}}})
+
+db.estudiantes.distinct("nombre")
+db.heroes.find({"enemies.name":"Joker"})
+db.heroes.find({"enemies.name":{$in:["Joker", "Magneto"]}})
+db.heroes.find({name:/bat/i})
+db.heroes.find({"enemies.name":/red/i})
+
+
+db.heroes.find({}, {name:1, alias:1})
+db.heroes.find({}, {powers:0, team:0, enemies: 0, publisher:0, id:0, _id:0})
+db.heroes.find({}, {name:1, alias:1, _id:0})
+db.heroes.find({publisher:"Marvel"}, {name:1, alias:1, _id:0})
+db.heroes.find({}, {name:1, alias:1, powers:0})
+db.heroes.find({}, {name:0, alias:0, powers:1})
+
+db.heroes.find({}, {name:1, alias:1, _id:0}).sort({name:-1})
+db.heroes.find({}, {publisher: 1, name:1, alias:1, _id:0}).sort({publisher: 1, name:1})
+
+db.heroes.find({}, {name:1, alias:1, _id:0}).skip(5)
+db.heroes.find({}, {name:1, alias:1, _id:0}).limit(4)
+
+
+ ['Superhuman strength','Invulnerability', 'Regenerative healing']
+
+db.heroes.find({name:"Hulk"})
+db.heroes.updateOne({name:"Hulk"}, )
+db.heroes.updateOne({name:"Hulk"}, {$unset: {powers:true}})
+db.heroes.updateOne({name:"Hulk"}, {$set: {powers:['Superhuman strength','Invulnerability', 'Regenerative healing']}})
+db.heroes.updateOne({name:"Hulk"}, {$set: {vive:true, devastates:true}})
+db.heroes.updateOne({name:"Hulk"}, {$rename: {"vive":"alive"}})
+db.heroes.updateOne({name:"Hulk"}, {$set: {age:36}})
+db.heroes.updateOne({name:"Hulk"}, {$inc: {age:2}})
+db.heroes.updateOne({name:"Hulk"}, {$max: {age:20}})
+
+db.heroes.updateOne({name:"Gamora"}, {$set: {publisher:"Marvel"}}, {upsert:true})
+db.heroes.updateMany({publisher:"DC"}, {$set: {alive:true}})
+
+db.heroes.deleteOne({name:"Hulk"})
+db.heroes.deleteMany({publisher:"Marvel"})
+
+db.heroes.find({powers:{$size:3}, id:{$gte:10}})
+db.heroes.find({powers:{$size:3}})
+
+https://www.mongodb.com/docs/manual/reference/operator/query/
+
+
+db.heroes.find({powers:{$all:["Shape-shifting", "Telepathy"]}})
+db.heroes.find({enemies:{$elemMatch: {name:"Joker"}}})
+
+db.estudiantes.distinct("nombre")
+db.heroes.find({"enemies.name":"Joker"})
+db.heroes.find({"enemies.name":{$in:["Joker", "Magneto"]}})
+db.heroes.find({name:/bat/i})
+db.heroes.find({"enemies.name":/red/i})
+
+
+db.heroes.find({}, {name:1, alias:1})
+db.heroes.find({}, {powers:0, team:0, enemies: 0, publisher:0, id:0, _id:0})
+db.heroes.find({}, {name:1, alias:1, _id:0})
+db.heroes.find({publisher:"Marvel"}, {name:1, alias:1, _id:0})
+db.heroes.find({}, {name:1, alias:1, powers:0})
+db.heroes.find({}, {name:0, alias:0, powers:1})
+
+db.heroes.find({}, {name:1, alias:1, _id:0}).sort({name:-1})
+db.heroes.find({}, {publisher: 1, name:1, alias:1, _id:0}).sort({publisher: 1, name:1})
+
+db.heroes.find({}, {name:1, alias:1, _id:0}).skip(5)
+db.heroes.find({}, {name:1, alias:1, _id:0}).limit(4)
+
+
+ ['Superhuman strength','Invulnerability', 'Regenerative healing']
+
+db.heroes.find({name:"Hulk"})
+db.heroes.updateOne({name:"Hulk"}, )
+db.heroes.updateOne({name:"Hulk"}, {$unset: {powers:true}})
+db.heroes.updateOne({name:"Hulk"}, {$set: {powers:['Superhuman strength','Invulnerability', 'Regenerative healing']}})
+db.heroes.updateOne({name:"Hulk"}, {$set: {vive:true, devastates:true}})
+db.heroes.updateOne({name:"Hulk"}, {$rename: {"vive":"alive"}})
+db.heroes.updateOne({name:"Hulk"}, {$set: {age:36}})
+db.heroes.updateOne({name:"Hulk"}, {$inc: {age:2}})
+db.heroes.updateOne({name:"Hulk"}, {$max: {age:20}})
+
+db.heroes.updateOne({name:"Gamora"}, {$set: {publisher:"Marvel"}}, {upsert:true})
+db.heroes.updateMany({publisher:"DC"}, {$set: {alive:true}})
+
+db.heroes.deleteOne({name:"Hulk"})
+db.heroes.deleteMany({publisher:"Marvel"})

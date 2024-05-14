@@ -33,6 +33,11 @@ class ProductManagerDB {
   async deleteProduct(id) {
     return await productsModel.deleteOne(id);
   }
+  async productUpdate(id, product) {
+    return await productsModel.findByIdAndUpdate(id, product, {
+      runValidators: true,
+    });
+  }
 }
 
 module.exports = ProductManagerDB;

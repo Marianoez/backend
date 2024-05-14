@@ -1,3 +1,4 @@
+const { isValidObjectId } = require("mongoose");
 const ProductManagerDB = require("../dao/ProductManagerDB.js");
 const Router = require("express").Router;
 const router = Router();
@@ -103,12 +104,17 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/:pid", async (req, res) => {
-  try {
-    await productManager.recovery();
-    let { pid } = req.params;
-    const pUpdate = await productManager.updateProduct(Number(pid), req.body);
+  let { pid } = req.params;
+  if (!isValidObjectId(pid)) {
+    res.setHeader("Content-Type", "application/json");
+    return res.status(400).json({ error: "Ingrese un ID correcto. " });
+  }
 
-    return res.json({ pUpdate });
+  let toModify = req.body;
+  try {
+    let productUpdated = productManager.productUpdate(pid, toModify);
+    res.setHeader("Content-Type", "application/json");
+    return res.status(200).json({ productUpdated });
   } catch (error) {
     res.status(500).json({
       error: error.message || "Error en el servidor",

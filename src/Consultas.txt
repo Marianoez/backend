@@ -93,3 +93,10 @@ db.heroes.updateMany({publisher:"DC"}, {$set: {alive:true}})
 
 db.heroes.deleteOne({name:"Hulk"})
 db.heroes.deleteMany({publisher:"Marvel"})
+
+db.productos.insertMany([{"title":"Play 55","description":"Ultima Playstation 5","price":999,"thumbnail":["www.google.com.ar"],"code":"d1123","stock":185}
+,{"title":"Pc Gamer","description":"Pc gamer con monitor y placa de video RTX","price":2000,"thumbnail":["www.outlook.com.ar"],"code":"d1124","stock":20}
+,{"title":"SEGA","description":"Consola antigua de videojuegos 32bits","price":199,"thumbnail":["www.youtube.com.ar"],"code":"d1125","stock":10}
+,{"title":"Tractor Jhon deere","description":"Tractor Verde","price":222,"thumbnail":["www.google.com.ar"],"code":"d1124","stock":20}
+,{"title":"Probando","description":"Nuevo PRoducto","price":1111,"thumbnail":["www.google.com.ar"],"code":"s123","stock":21}
+,{"title":"Probando12","description":"Nuevo PRoducto","price":1111,"thumbnail":["www.google.com.ar"],"code":"s123a","stock":21}])

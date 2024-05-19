@@ -1,76 +1,191 @@
-const CartManager = require("../dao/CartManager");
+const { isValidObjectId } = require("mongoose");
+const CartManganagerDB = require("../dao/CartManagerDB.js");
 const Router = require("express").Router;
 const router = Router();
-const path = require("path");
-const routeCart = path.join(__dirname, "../data/carts.json");
 
-const cartEnviroment = async () => {
-  const cartManager = new CartManager(routeCart);
+const cartManager = new CartManganagerDB();
+
+//getCarts
+router.get("/", async (req, res) => {
   try {
-    await cartManager.getCart();
+    let getAllCarts = await cartManager.getCarts();
+    res.json({ getAllCarts });
   } catch (error) {
-    console.log(error.message);
-    return;
+    res.status(500).json({ error: `error getting carts: ${error.message}` });
+  }
+});
+
+//createCarts
+router.post("/", async (req, res) => {
+  try {
+    await cartManager.createCart();
+    res.json({
+      payload: `Cart successfully created.`,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "error, cart not created" });
+  }
+});
+
+//getCartsByID
+router.get("/:cid", async (req, res) => {
+  let { cid } = req.params;
+  if (!isValidObjectId(cid)) {
+    return res.status(400).json({
+      error: `Enter a valid MongoDB id`,
+    });
   }
 
-  //Andando GetCarts -
-  router.get("/", async (req, res) => {
-    try {
-      let carts = await cartManager.getCart();
-      res.status(200).json(carts);
-    } catch (error) {
-      res.status(500).json({
-        error: error.message || "Error en el servidor",
+  try {
+    let cartById = await cartManager.getCartById(cid);
+    if (!cartById) {
+      return res.status(300).json({ error: "Cart not found" });
+    } else {
+      res.json({ cartById });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: `error getting cart ${cid}, ${error.message}` });
+  }
+
+  router.post("/:cid/product/:pid", async (req, res) => {
+    let { cid, pid } = req.params;
+
+    if (!isValidObjectId(cid, pid)) {
+      return res.status(400).json({
+        error: `Enter a valid MongoDB id`,
       });
     }
-  });
 
-  //Andando getCartById -
-  router.get("/:cid", async (req, res) => {
+    if (!cid || !pid) {
+      return res.status(300).json({ error: "Check unfilled fields" });
+    }
+
     try {
-      await cartManager.getCart();
-      let { cid } = req.params;
-      cartd = await cartManager.getCartProductsById(parseInt(cid));
-      console.log(cartd);
-      return res.json(cartd);
+      await cartManager.addProducts(cid, pid);
+      let cartUpdated = await cartManager.getCartById(cid);
+      res.json({ payload: cartUpdated });
     } catch (error) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(500).json({
-        error: `Error inesperado en el servidor.`,
-      });
+      res
+        .status(500)
+        .json({ error: `error when adding product ${pid} to cart ${cid}` });
     }
   });
+});
 
-  //Andando CreateCarts
-  router.post("/", async (req, res) => {
-    try {
-      await cartManager.getCart();
-      let nCart = await cartManager.createCart();
-      return res.json(nCart);
-    } catch (error) {
-      res.setHeader("Content-Type", "application/json");
-      return res.status(500).json({
-        error: `Error inesperado en el servidor.`,
-      });
-    }
-  });
+//addProduct
+router.post("/:cid/product/:pid", async (req, res) => {
+  let { cid, pid } = req.params;
 
-  //Andando post -
-  router.post("/:cid/products/:pid", async (req, res) => {
-    try {
-      let cid = Number(req.params.cid);
-      let pid = Number(req.params.pid);
-      await cartManager.addToCart(cid, pid);
+  if (!isValidObjectId(cid, pid)) {
+    return res.status(400).json({
+      error: `Enter a valid MongoDB id`,
+    });
+  }
 
-      let mostrarCarrito = await cartManager.getCartById(cid);
+  if (!cid || !pid) {
+    return res.status(300).json({ error: "Check unfilled fields" });
+  }
 
-      res.json(mostrarCarrito);
-    } catch (error) {
-      res.status(300).json({ error: `Error al cargar productos al cart. ` });
-    }
-  });
-};
+  try {
+    await cartManager.addProducts(cid, pid);
+    let cartUpdated = await cartManager.getCartById(cid);
+    res.json({ payload: cartUpdated });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: `error when adding product ${pid} to cart ${cid}` });
+  }
+});
 
-cartEnviroment();
+router.delete("/:cid/product/:pid", async (req, res) => {
+  let { cid, pid } = req.params;
+  if (!isValidObjectId(cid)) {
+    return res.status(400).json({
+      error: `Enter a valid MongoDB id`,
+    });
+  }
+
+  if (!cid || !pid) {
+    return res.status(300).json({ error: "Check unfilled fields" });
+  }
+
+  try {
+    await cartManager.deleteProduct(cid, pid);
+    return res.json({ payload: `Product ${pid} deleted from cart ${cid}` });
+  } catch (error) {
+    return res.status(500).json({ error: `${error.message}` });
+  }
+});
+
+//UpdateCartProducts
+router.put("/:cid/product/:pid", async (req, res) => {
+  let { cid, pid } = req.params;
+  let { quantity } = req.body;
+  if (!isValidObjectId(cid)) {
+    return res.status(400).json({
+      error: `Enter a valid MongoDB id`,
+    });
+  }
+
+  if (!cid || !pid) {
+    return res.status(300).json({ error: "Check unfilled fields" });
+  }
+
+  try {
+    await cartManager.updateCartProducts(cid, pid, quantity);
+    res.json({ payload: `Product ${pid} updated` });
+  } catch (error) {
+    return res.status(500).json({ error: `${error.message}` });
+  }
+});
+
+//deleteAllProducts
+router.delete("/:cid", async (req, res) => {
+  let { cid } = req.params;
+  if (!isValidObjectId(cid)) {
+    return res.status(400).json({
+      error: `Enter a valid MongoDB id`,
+    });
+  }
+
+  if (!cid) {
+    return res.status(300).json({ error: "Check unfilled fields" });
+  }
+
+  try {
+    await cartManager.deleteAllProducts(cid);
+    res.json({ payload: `Products deleted from cart ${cid}` });
+  } catch (error) {
+    return res.status(500).json({ error: `${error.message}` });
+  }
+});
+
+//updateCart
+router.put("/:cid", async (req, res) => {
+  let { cid } = req.params;
+  let toUpdate = req.body;
+  if (!isValidObjectId(cid)) {
+    return res.status(400).json({
+      error: `Enter a valid MongoDB id`,
+    });
+  }
+
+  if (!cid) {
+    return res.status(400).json({ error: "Cart ID is missing" });
+  }
+
+  if (!toUpdate.product || !toUpdate.quantity) {
+    return res.status(400).json({ error: "Invalid Cart" });
+  }
+
+  try {
+    await cartManager.updateCart(cid, toUpdate);
+    res.json({ payload: `Cart ${cid} updated` });
+  } catch (error) {
+    return res.status(500).json({ error: `${error.message}` });
+  }
+});
 
 module.exports = router;

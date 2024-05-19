@@ -3,7 +3,7 @@ const productsModel = require("./models/productsModel.js");
 
 class ProductManagerDB {
   async getProduct() {
-    return await productsModel.find();
+    return await productsModel.find().lean();
   }
   async addProduct({
     title,

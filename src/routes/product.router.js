@@ -86,11 +86,12 @@ router.delete("/:id", async (req, res) => {
   try {
     let { id } = req.params;
     let existe = await productManager.getProductBy({ _id: id });
+    console.log(existe);
     if (existe) {
       let productDeleted = await productManager.deleteProduct({ _id: id });
       let updatedList = await productManager.getProduct();
       req.io.emit("ProductDelete", updatedList);
-      res.status(200).json({ message: `Product ${{ existe }} deleted` });
+      res.status(200).json({ message: `Product ${existe.title} deleted` });
     } else {
       res.status(500).json({
         error: `El producto con ID: ${id} No existe`,

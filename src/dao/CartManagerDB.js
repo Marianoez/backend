@@ -8,12 +8,14 @@ class CartManagerDB {
   }
 
   async getCarts() {
-    const carts = await cartsModel.find();
+    const carts = await cartsModel.find().populate("products.product");
     return carts;
   }
 
   async getCartById(idCart) {
-    const searchCart = await cartsModel.findOne({ _id: idCart });
+    const searchCart = await cartsModel
+      .findOne({ _id: idCart })
+      .populate("products.product");
     return searchCart;
   }
 
